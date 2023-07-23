@@ -59,6 +59,13 @@ async function run() {
             const result = await allCollegeCollection.find().toArray();
             res.send(result);
         })
+        // get college for details
+        app.get("/collegeDetails/:id", async (req,res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await allCollegeCollection.findOne(query);
+            res.send(result);
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
