@@ -34,6 +34,7 @@ async function run() {
         // all collections
         const usersCollection = client.db("college-booking").collection("users");
         const allCollegeCollection = client.db("college-booking").collection("allCollege");
+        const selectedCollegeCollection = client.db("college-booking").collection("selectedCollege");
 
         // Connect the client to the server	(optional starting in v4.7)
         client.connect();
@@ -60,13 +61,25 @@ async function run() {
             res.send(result);
         })
         // get college for details
-        app.get("/collegeDetails/:id", async (req,res) => {
+        app.get("/collegeDetails/:id", async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await allCollegeCollection.findOne(query);
             res.send(result);
         })
-
+        // get all selected college
+        app.get("/myCollege", async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await selectedCollegeCollection.find(query).toArray();
+            res.send(result);
+        })
+        // Add College to my college
+        app.post("/addCollege", async (req, res) => {
+            const college = req.body;
+            const result = await selectedCollegeCollection.insertOne(college)
+            res.send(result);
+        })
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
