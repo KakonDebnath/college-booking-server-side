@@ -35,6 +35,7 @@ async function run() {
         const usersCollection = client.db("college-booking").collection("users");
         const allCollegeCollection = client.db("college-booking").collection("allCollege");
         const selectedCollegeCollection = client.db("college-booking").collection("selectedCollege");
+        const reviewCollection = client.db("college-booking").collection("reviews");
 
         // Connect the client to the server	(optional starting in v4.7)
         client.connect();
@@ -63,8 +64,12 @@ async function run() {
         })
         // get all college
         app.get('/allCollege', async (req, res) => {
-
             const result = await allCollegeCollection.find().toArray();
+            res.send(result);
+        })
+        // get testimonials 
+        app.get('/testimonials', async (req, res) => {
+            const result = await reviewCollection.find().toArray();
             res.send(result);
         })
         // get college for details
@@ -85,6 +90,12 @@ async function run() {
         app.post("/addCollege", async (req, res) => {
             const college = req.body;
             const result = await selectedCollegeCollection.insertOne(college)
+            res.send(result);
+        })
+        // Add review route
+        app.post("/addReview", async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
             res.send(result);
         })
         // Send a ping to confirm a successful connection
