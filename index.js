@@ -43,7 +43,7 @@ async function run() {
         // Save user email and role in DB all
         app.put('/users', async (req, res) => {
             const user = req.body
-            console.log(user);
+            // console.log(user);
             const email = user.email
             const query = { email: email }
             const options = { upsert: true }
@@ -54,6 +54,13 @@ async function run() {
             res.send(result)
         })
 
+        // get Profile
+        app.get('/userProfile', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await usersCollection.findOne(query);
+            res.send(result);
+        })
         // get all college
         app.get('/allCollege', async (req, res) => {
 
